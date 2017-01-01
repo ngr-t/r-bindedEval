@@ -45,14 +45,15 @@ make_adjacency_matrix_from_bindings <- function(bindings) {
 
 decide_order_to_eval <- function(bindings) {
   binded_names <- names(bindings)
-  tryCatch({
-    order_to_eval <- bindings %>%
-      make_adjacency_matrix_from_bindings() %>%
-      graph_from_adjacency_matrix() %>%
-      topological.sort() %>%
-      swap_args(`[`)(binded_names)
-    },
-    warning = function (e) stop("Binding has cross-references."))
+  order_id_to_eval <- bindings %>%
+    make_adjacency_matrix_from_bindings() %>%
+    graph_from_adjacency_matrix() %>%
+    topological.sort()
+  # If the adjacency graph isn't DAG, returned order is the sorted order on partial graph.
+  # In the case `topological.sort()` throws warning,
+  # but, I can't see why, catching the warning by `tryCatch()` fails.
+  if (length(order_id_to_eval) != length(bindings)) stop("Binding has cross-references.")
+  order_to_eval <- binded_names[order_id_to_eval]
   return(order_to_eval)
 }
 

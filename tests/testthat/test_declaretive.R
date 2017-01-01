@@ -17,6 +17,12 @@ test_that("`decide_order_to_eval()` works correctly",
     expect_equal(order, c("a", "b", "x"))
   })
 
+test_that("decide_order_to_eval() stops on cross-reference.",
+  {
+    binding <- tail(substitute(c(x = y, y = x)), - 1)
+    expect_error(decide_order_to_eval(binding))
+  })
+
 test_that("velocity function in example of `let()` works correctly",
 {
   velocity <- function (x1, x2, t1, t2) let(
