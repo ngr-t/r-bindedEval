@@ -45,11 +45,14 @@ make_adjacency_matrix_from_bindings <- function(bindings) {
 
 decide_order_to_eval <- function(bindings) {
   binded_names <- names(bindings)
-  order_to_eval <- bindings %>%
-    make_adjacency_matrix_from_bindings() %>%
-    graph_from_adjacency_matrix() %>%
-    topological.sort() %>%
-    swap_args(`[`)(binded_names)
+  tryCatch({
+    order_to_eval <- bindings %>%
+      make_adjacency_matrix_from_bindings() %>%
+      graph_from_adjacency_matrix() %>%
+      topological.sort() %>%
+      swap_args(`[`)(binded_names)
+    },
+    warning = function (e) stop("Binding has cross-references."))
   return(order_to_eval)
 }
 
