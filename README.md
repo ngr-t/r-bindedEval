@@ -19,7 +19,7 @@ library(bindedEval)
 z <- let(x = 1, y = 2, .in = x + y)
 # We can't access x and y from the outside of `let()`
 
-velocity_let <- function (x1, x2, t1, t2) {
+velocity_let <- function (x1, x2, t1, t2) let(
   dx = x2 - x1,
   dt = t2 - t1,
   .in = dx / dt)
