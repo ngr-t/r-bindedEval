@@ -14,7 +14,7 @@ Usage
 
 ```R
 library(magrittr)
-library(bind_names)
+library(bindedEval)
 
 z <- let(x = 1, y = 2, .in = x + y)
 # We can't access x and y from the outside of `let()`
